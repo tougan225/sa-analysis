@@ -4,12 +4,23 @@ name: Construction d'un projet
 on:
   push:
     branches: [ "main", "develop" ]
-
+  workflow_dispatch:
 jobs:
-  build:
-
+  create-folder:
+    name: create-folder
     runs-on: ubuntu-latest
+    steps:
+      - name: create folder on remote vm
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: whoami
 
+  build:
+    runs-on: ubuntu-latest
     steps:
     - name: Téléchargement des sources
       uses: actions/checkout@v4
@@ -20,4 +31,4 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -Dmaven.tests.skip=true -B package --file pom.xml
+      run: mvn -Dmaven.test.skip=true -B package --file pom.xml
