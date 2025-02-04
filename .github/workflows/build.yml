@@ -13,11 +13,12 @@ jobs:
       - name: create folder on remote vm
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          host: 192.168.56.10
+          username: vagrant
           key: ${{ secrets.PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          script: mkdir -p /opt/applications/sa
+          port: 22
+          script: |
+            sudo mkdir -p /opt/applications/sa
 
   build:
     runs-on: ubuntu-latest
@@ -41,10 +42,10 @@ jobs:
     - name: copy file via ssh password
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
+        host: 192.168.56.10
+        username: vagrant
         key: ${{ secrets.PRIVATE_KEY }}
-        port: ${{ secrets.PORT }}
+        port: 22
         source: "target/sa.jar"
         target: /opt/applications/sa
         strip_components: 1
@@ -57,11 +58,11 @@ jobs:
       - name: create folder on remote vm
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
+          host: 192.168.56.10
+          username: vagrant
           key: ${{ secrets.PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          script: | 
-              ln -sf /opt/applications/sa/sa.jar /etc/init.d/sa
-              /etc/init.d/sa stop
-              /etc/init.d/sa start
+          port: 22
+          script: |
+            sudo ln -sf /opt/applications/sa/sa.jar /etc/init.d/sa
+            sudo /etc/init.d/sa stop
+            sudo /etc/init.d/sa start
