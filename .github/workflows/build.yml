@@ -13,8 +13,8 @@ jobs:
       - name: create folder on remote vm
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: 192.168.1.5
-          username: vdebian
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
@@ -42,10 +42,10 @@ jobs:
     - name: copy file via ssh password
       uses: appleboy/scp-action@v0.1.7
       with:
-        host: 192.168.1.5
-        username: vdebian
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
         key: ${{ secrets.PRIVATE_KEY }}
-        port: 22
+        port: ${{ secrets.PORT }}
         source: "target/sa.jar"
         target: /opt/applications/sa
         strip_components: 1
@@ -58,8 +58,8 @@ jobs:
       - name: create folder on remote vm
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: 192.168.1.5
-          username: vdebian
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
